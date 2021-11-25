@@ -1,12 +1,13 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 
 from sqlalchemy.orm import sessionmaker
 
-from board.repositories import Base, engine
+from board.repositories import engine
 from board.repositories.models import DBUser, DBPost
 
 from datetime import datetime
+
+from board.rest.models.board import User, Post, ModifyUserInfo
 
 router = APIRouter()
 
@@ -23,18 +24,6 @@ class MakeSession:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.session.close()
 
-class User(BaseModel):
-    name: str
-    email: str
-    password: str
-
-class Post(BaseModel):
-    title: str
-    content: str
-
-class ModifyUserInfo(BaseModel):
-    name: str = None
-    password: str = None
 
 @router.get("/")
 def test():
