@@ -3,14 +3,17 @@ from pydantic import BaseModel
 
 from sqlalchemy.orm import sessionmaker
 from board.repositories import Base, engine
-from board.repositories.models import DBUser
+from board.repositories.models import DBUser, DBPost
+
+from datetime import datetime
 
 router = APIRouter()
 
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine) #db 사용을 위한 session 연결
 
 class MakeSession:
     session = None
+    #session 사용을 위한 open/close를 python context를 이용하여 설정
 
     def __enter__(self):
         self.session = Session()
@@ -24,13 +27,17 @@ class User(BaseModel):
     email: str
     password: str
 
+class Post(BaseModel):
+    title: str
+    content: str
+
 @router.get("/")
 def test():
     return "test"
 
 @router.post("/join_user")
 def joinUser(user: User):
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine) 처음 1회만 생성하면 됨
 
     with MakeSession() as session:
         new_user = DBUser()
@@ -41,5 +48,23 @@ def joinUser(user: User):
         session.add(new_user)
         session.commit()
 
-        user1 = session.query(DBUser).first()
-    return user1
+        result = session.query(DBUser).all()
+    return result
+
+@router.post("/upload_post")
+def uploadPost(post: Post):
+    # Base.metadata.create_all(engine)
+
+    #post한 내용 등록
+    with MakeSession() as session:
+        new_post = DBPost()
+        new_post.title = post.title
+        new_post.content = post.content
+        new_post.updated_at = datetime.utcnow()
+
+        session.add(new_post)
+        session.commit()
+
+        result = session.query(DBPost).all()
+
+    return result
