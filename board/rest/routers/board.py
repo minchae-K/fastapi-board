@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from sqlalchemy.orm import sessionmaker
+
 from board.repositories import Base, engine
 from board.repositories.models import DBUser, DBPost
 
@@ -31,6 +32,10 @@ class Post(BaseModel):
     title: str
     content: str
 
+class ModifyUserInfo(BaseModel):
+    name: str = None
+    password: str = None
+
 @router.get("/")
 def test():
     return "test"
@@ -50,6 +55,22 @@ def joinUser(user: User):
 
         result = session.query(DBUser).all()
     return result
+
+@router.put("/modify_user")
+def modifyUser(user_id: int, info: ModifyUserInfo):
+    #user data 수정
+    with MakeSession() as session:
+        user = session.query(DBUser).filter_by(id=user_id).first()
+        #filter_by로 넣으면 like 연산으로 들어가는 것?
+
+        if info.name != None:
+            user.name = info.name
+        if info.password != None:
+            user.password = info.password
+
+        session.add(user)
+        session.commit()
+    return user
 
 @router.post("/upload_post")
 def uploadPost(post: Post):
