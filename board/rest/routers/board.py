@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from sqlalchemy.orm import sessionmaker
 
 from board.repositories import engine
+from board.repositories.base import Base
 from board.repositories.models import DBUser, DBPost
 
 from datetime import datetime
@@ -11,6 +12,7 @@ from board.rest.models.board import User, Post, ModifyUserInfo
 
 router = APIRouter()
 
+# Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine) #db 사용을 위한 session 연결
 
 class MakeSession:
@@ -31,7 +33,7 @@ def test():
 
 @router.post("/join_user")
 def joinUser(user: User):
-    # Base.metadata.create_all(engine) 처음 1회만 생성하면 됨
+    Base.metadata.create_all(engine)
 
     with MakeSession() as session:
         new_user = DBUser()
@@ -63,18 +65,19 @@ def modifyUser(user_id: int, info: ModifyUserInfo):
 
 @router.post("/upload_post")
 def uploadPost(post: Post):
-    # Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
-    #post한 내용 등록
-    with MakeSession() as session:
-        new_post = DBPost()
-        new_post.title = post.title
-        new_post.content = post.content
-        new_post.updated_at = datetime.utcnow()
-
-        session.add(new_post)
-        session.commit()
-
-        result = session.query(DBPost).all()
-
-    return result
+    # #post한 내용 등록
+    # with MakeSession() as session:
+    #     new_post = DBPost()
+    #     new_post.user_id = post.user_id
+    #     new_post.title = post.title
+    #     new_post.content = post.content
+    #     new_post.updated_at = datetime.utcnow()
+    #
+    #     session.add(new_post)
+    #     session.commit()
+    #
+    #     result = session.query(DBPost).all()
+    #
+    # return result

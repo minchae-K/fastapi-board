@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from board.repositories import Base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from board.repositories.base import Base
 
 from datetime import datetime
 
@@ -20,3 +21,6 @@ class DBPost(Base):
     created_at = Column(DateTime, default=datetime.utcnow())
     updated_at = Column(DateTime)
 
+    user_id = Column(Integer, ForeignKey('users.id')) #post 작성한 user의 id를 foreign key로 설정
+
+    user = relationship('DBUser') #실제 DB 칼럼으로 존재하는 변수 아님 -> 코드 상에서 쉽게 접근하기 위해 설정

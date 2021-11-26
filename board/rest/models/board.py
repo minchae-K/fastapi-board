@@ -11,5 +11,6 @@ class ModifyUserInfo(BaseModel):
     password: str = None
 
 class Post(BaseModel):
+    user_id: int
     title: str
     content: str
