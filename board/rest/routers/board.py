@@ -28,8 +28,8 @@ class MakeSession:
 
 
 @router.get("/")
-def test():
-    return "test"
+def l7ConnectionCheck():
+    return "success"
 
 @router.post("/join_user")
 def joinUser(user: User):
