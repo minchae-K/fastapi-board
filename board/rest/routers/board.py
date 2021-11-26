@@ -33,7 +33,7 @@ def l7ConnectionCheck():
 
 @router.post("/join_user")
 def joinUser(user: User):
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
 
     with MakeSession() as session:
         new_user = DBUser()
@@ -77,19 +77,19 @@ def inactivateUser(user_id: int):
 
 @router.post("/upload_post")
 def uploadPost(post: Post):
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
 
-    # #post한 내용 등록
-    # with MakeSession() as session:
-    #     new_post = DBPost()
-    #     new_post.user_id = post.user_id
-    #     new_post.title = post.title
-    #     new_post.content = post.content
-    #     new_post.updated_at = datetime.utcnow()
-    #
-    #     session.add(new_post)
-    #     session.commit()
-    #
-    #     result = session.query(DBPost).all()
-    #
-    # return result
+    #post한 내용 등록
+    with MakeSession() as session:
+        new_post = DBPost()
+        new_post.user_id = post.user_id
+        new_post.title = post.title
+        new_post.content = post.content
+        new_post.updated_at = datetime.utcnow()
+
+        session.add(new_post)
+        session.commit()
+
+        result = session.query(DBPost).all()
+
+    return result
