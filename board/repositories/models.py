@@ -11,7 +11,7 @@ class DBUser(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    delete = Column(Boolean, nullable=False, default=False)
+    inactivate = Column(Boolean, default=False)
 
 class DBPost(Base):
     __tablename__ = 'posts'
