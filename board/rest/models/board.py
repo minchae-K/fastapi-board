@@ -14,3 +14,7 @@ class Post(BaseModel):
     user_id: int
     title: str
     content: str
+
+class ModifyPostInfo(BaseModel):
+    title: str = None
+    content: str = None

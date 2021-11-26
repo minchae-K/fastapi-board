@@ -7,7 +7,7 @@ from board.repositories.models import DBPost
 
 from datetime import datetime
 
-from board.rest.models.board import Post
+from board.rest.models.board import Post, ModifyPostInfo
 
 router = APIRouter()
 
@@ -49,3 +49,17 @@ def uploadPost(post: Post):
         result = session.query(DBPost).all()
 
     return result
+
+@router.put('/modify_post')
+def modifyPost(post_id: int, info: ModifyPostInfo):
+
+    with MakeSession() as session:
+        post = session.query(DBPost).filter_by(id=post_id).first()
+
+        if info.title != None:
+            post.title = info.title
+        if info.content != None:
+            post.content = info.content
+
+        session.add(post)
+        session.commit()
