@@ -63,6 +63,18 @@ def modifyUser(user_id: int, info: ModifyUserInfo):
         session.commit()
     return user
 
+@router.put("/inactivate_user")
+def inactivateUser(user_id: int):
+    #user를 비활성화
+    with MakeSession() as session:
+        user = session.query(DBUser).filter_by(id=user_id).first()
+
+        user.inactivate = True
+
+        session.add(user)
+        session.commit()
+    return user
+
 @router.post("/upload_post")
 def uploadPost(post: Post):
     Base.metadata.create_all(engine)
