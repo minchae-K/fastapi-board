@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from board.repositories.base import Base
 
@@ -11,6 +11,7 @@ class DBUser(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
+    inactivate = Column(Boolean, default=False)
 
 class DBPost(Base):
     __tablename__ = 'posts'
