@@ -3,7 +3,8 @@ from typing import List
 from board.repositories.models import DBPost, DBUser
 from board.rest.models.board import ResPost
 
-from board.rest.routers.board import MakeSession
+from board.repositories import MakeSession
+
 
 def make_post_list(posts: List[DBPost], session: MakeSession):
     res = []

@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from board.repositories.models import DBUser
 from board.rest.models.board import User, ModifyUserInfo
-from board.rest.routers.board import MakeSession
+from board.repositories import MakeSession
 
 router = APIRouter()
 

@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
-from sqlalchemy.orm import sessionmaker
-
-from board.repositories import engine
+from board.repositories import MakeSession
 from board.repositories.models import DBPost, DBUser
 
 from datetime import datetime
@@ -14,18 +12,6 @@ from board.utils.common import make_post_list
 router = APIRouter()
 
 # Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine) #db 사용을 위한 session 연결
-
-class MakeSession:
-    session = None
-    #session 사용을 위한 open/close를 python context를 이용하여 설정
-
-    def __enter__(self):
-        self.session = Session()
-        return self.session
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.session.close()
 
 
 @router.get("/")
