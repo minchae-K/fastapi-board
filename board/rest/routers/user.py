@@ -10,9 +10,11 @@ router = APIRouter()
 def getUserInfo(user_id: int):
     with MakeSession() as session:
         user = session.query(DBUser).filter_by(id=user_id, inactivate=False).first()
+        print('user : {}'.format(user))
 
+        if user is None:
+            return '등록되지 않은 사용자이거나 탈퇴한 사용자입니다.'
         res = User(name=user.name, email=user.email, password=user.password)
-        #
         return res
 
 @router.post("/join_user")

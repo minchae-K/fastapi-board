@@ -13,6 +13,10 @@ class DBUser(Base):
     password = Column(String, nullable=False)
     inactivate = Column(Boolean, default=False)
 
+    def __repr__(self):
+        return "<User(name='%s', email='%s', password='%s')>" % (
+            self.name, self.email, self.password)
+
 class DBPost(Base):
     __tablename__ = 'posts'
 
