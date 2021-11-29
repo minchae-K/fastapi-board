@@ -41,10 +41,11 @@ def getAllPost():
             res = []
             for post in posts:
                 name = session.query(DBUser.name).filter_by(id=post.user_id).first()
-                modify = True if post.created_at == post.updated_at else False
+                modify = True if post.created_at.strftime("%m/%d/%Y, %H:%M") == post.updated_at.strftime("%m/%d/%Y, %H:%M") else False
                 res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
 
     return res
+
 
 
 @router.post("/upload_post")
