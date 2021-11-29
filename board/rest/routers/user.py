@@ -9,10 +9,10 @@ router = APIRouter()
 @router.get("/user_info/{user_id}")
 def getUserInfo(user_id: int):
     with MakeSession() as session:
-        user = session.query(DBUser).filter_by(id=user_id).first()
+        user = session.query(DBUser).filter_by(id=user_id, inactivate=False).first()
 
         res = User(name=user.name, email=user.email, password=user.password)
-
+        #
         return res
 
 @router.post("/join_user")
