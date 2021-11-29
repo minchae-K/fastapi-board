@@ -11,6 +11,7 @@ uvicorn = "^0.15.0"
 SQLAlchemy = "^1.4.27"
 psycopg2-binary = "^2.9.2"
 alembic = "^1.7.5"
+fastapi-pagination = "^0.9.1"
 
 [tool.poetry.dev-dependencies]
 
