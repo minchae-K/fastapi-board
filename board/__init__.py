@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from board.rest.routers import board_router
+from board.rest.routers import routers
 
 def create_app():
     app = FastAPI()
 
-    app.include_router(board_router)
+    app.include_router(routers)
     return app

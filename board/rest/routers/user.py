@@ -1,8 +1,19 @@
+from fastapi import APIRouter
+
 from board.repositories.models import DBUser
-from board.rest import router
 from board.rest.models.board import User, ModifyUserInfo
 from board.rest.routers.board import MakeSession
 
+router = APIRouter()
+
+@router.get("/user_info/{user_id}")
+def getUserInfo(user_id: int):
+    with MakeSession() as session:
+        user = session.query(DBUser).filter_by(id=user_id).first()
+
+        res = User(name=user.name, email=user.email, password=user.password)
+
+        return res
 
 @router.post("/join_user")
 def joinUser(user: User):
@@ -17,7 +28,7 @@ def joinUser(user: User):
         session.add(new_user)
         session.commit()
 
-        result = session.query(DBUser).all()
+        result = session.query(DBUser).last()
     return result
 
 
