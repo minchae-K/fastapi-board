@@ -37,15 +37,28 @@ def getAllPost():
         posts = session.query(DBPost).all()
         if posts is None:
             return 'post가 존재하지 않습니다.'
-        else:
-            res = []
-            for post in posts:
-                name = session.query(DBUser.name).filter_by(id=post.user_id).first()
-                modify = True if post.created_at.strftime("%m/%d/%Y, %H:%M") == post.updated_at.strftime("%m/%d/%Y, %H:%M") else False
-                res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
+        res = []
+        for post in posts:
+            name = session.query(DBUser.name).filter_by(id=post.user_id).first()
+            modify = True if post.created_at.strftime("%m/%d/%Y, %H:%M") == post.updated_at.strftime("%m/%d/%Y, %H:%M") else False
+            res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
 
     return res
 
+@router.get("/id_posts/{user_id}")
+def getPostById(user_id: int):
+    with MakeSession() as session:
+        posts = session.query(DBPost).filter_by(user_id=user_id).all()
+        if posts is None:
+            return 'post가 존재하지 않습니다.'
+        res = []
+        for post in posts:
+            name = session.query(DBUser.name).filter_by(id=post.user_id).first()
+            modify = True if post.created_at.strftime("%m/%d/%Y, %H:%M") == post.updated_at.strftime(
+                "%m/%d/%Y, %H:%M") else False
+            res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
+
+    return res
 
 
 @router.post("/upload_post")
