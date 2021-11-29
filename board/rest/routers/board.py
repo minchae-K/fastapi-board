@@ -3,11 +3,11 @@ from fastapi import APIRouter
 from sqlalchemy.orm import sessionmaker
 
 from board.repositories import engine
-from board.repositories.models import DBPost
+from board.repositories.models import DBPost, DBUser
 
 from datetime import datetime
 
-from board.rest.models.board import Post, ModifyPostInfo
+from board.rest.models.board import Post, ModifyPostInfo, ResPost
 
 router = APIRouter()
 
@@ -29,6 +29,22 @@ class MakeSession:
 @router.get("/")
 def l7ConnectionCheck():
     return "success"
+
+
+@router.get("/all_post")
+def getAllPost():
+    with MakeSession() as session:
+        posts = session.query(DBPost).all()
+        if posts is None:
+            return 'post가 존재하지 않습니다.'
+        else:
+            res = []
+            for post in posts:
+                name = session.query(DBUser.name).filter_by(id=post.user_id).first()
+                modify = True if post.created_at == post.updated_at else False
+                res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
+
+    return res
 
 
 @router.post("/upload_post")

@@ -15,6 +15,12 @@ class Post(BaseModel):
     title: str
     content: str
 
+class ResPost(BaseModel):
+    user_name: str
+    title: str
+    content: str
+    modified: bool
+
 class ModifyPostInfo(BaseModel):
     title: str = None
     content: str = None
