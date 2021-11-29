@@ -24,7 +24,7 @@ class DBPost(Base):
     title = Column(String, nullable=False)
     content = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, default=datetime.utcnow())
 
     user_id = Column(Integer, ForeignKey('users.id')) #post 작성한 user의 id를 foreign key로 설정
 

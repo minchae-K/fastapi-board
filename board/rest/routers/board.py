@@ -40,7 +40,7 @@ def getAllPost():
         res = []
         for post in posts:
             name = session.query(DBUser.name).filter_by(id=post.user_id).first()
-            modify = True if post.created_at.strftime("%m/%d/%Y, %H:%M") == post.updated_at.strftime("%m/%d/%Y, %H:%M") else False
+            modify = False if post.created_at.strftime("%m/%d/%Y, %H:%M:%S") == post.updated_at.strftime("%m/%d/%Y, %H:%M:%S") else True
             res.append(ResPost(user_name=name[0], title=post.title, content=post.content, modified=modify))
 
     return res
@@ -71,7 +71,6 @@ def uploadPost(post: Post):
         new_post.user_id = post.user_id
         new_post.title = post.title
         new_post.content = post.content
-        new_post.updated_at = datetime.utcnow()
 
         session.add(new_post)
         session.commit()
@@ -91,5 +90,6 @@ def modifyPost(post_id: int, info: ModifyPostInfo):
         if info.content != None:
             post.content = info.content
 
+        post.updated_at = datetime.utcnow()
         session.add(post)
         session.commit()
