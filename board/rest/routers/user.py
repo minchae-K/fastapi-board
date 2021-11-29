@@ -30,8 +30,8 @@ def joinUser(user: User):
         session.add(new_user)
         session.commit()
 
-        result = session.query(DBUser).last()
-    return result
+        result = session.query(DBUser.name).filter_by(name=user.name).first()
+    return '{}님 계정이 등록되었습니다.'.format(result[0])
 
 
 @router.put("/modify_user")
@@ -48,7 +48,7 @@ def modifyUser(user_id: int, info: ModifyUserInfo):
 
         session.add(user)
         session.commit()
-    return user
+    return '데이터 수정이 완료되었습니다.'
 
 
 @router.put("/inactivate_user")
@@ -56,9 +56,10 @@ def inactivateUser(user_id: int):
     #user를 비활성화
     with MakeSession() as session:
         user = session.query(DBUser).filter_by(id=user_id).first()
+        name = user.name
 
         user.inactivate = True
 
         session.add(user)
         session.commit()
-    return user
+    return '{}님의 계정이 비활성화되었습니다.'.format(name)
